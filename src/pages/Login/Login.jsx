@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -7,9 +7,9 @@ import {
 } from "react-simple-captcha";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
-  const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
 
   const { signIn } = useContext(AuthContext);
@@ -28,11 +28,28 @@ const Login = () => {
     signIn(email, password).then((result) => {
       const user = result.user;
       console.log(user);
+      Swal.fire({
+        title: "User Login Successfully!!",
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `,
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `,
+        },
+      });
     });
   };
 
-  const handleValidateCaptcha = () => {
-    const userCaptchaValue = captchaRef.current.value;
+  const handleValidateCaptcha = (e) => {
+    const userCaptchaValue = e.target.value;
     console.log(userCaptchaValue);
 
     if (validateCaptcha(userCaptchaValue)) {
@@ -78,18 +95,15 @@ const Login = () => {
                 <LoadCanvasTemplate />
               </label>
               <input
+                onBlur={handleValidateCaptcha}
                 type="text"
                 name="recaptcha"
-                ref={captchaRef}
                 className="input"
                 placeholder="Type the Captcha Above"
               />
-              <button
-                onClick={handleValidateCaptcha}
-                className="btn btn-outline btn-xs w-1/2 mx-auto"
-              >
+              {/* <button className="btn btn-outline btn-xs w-1/2 mx-auto">
                 Validate
-              </button>
+              </button> */}
               <input
                 className="btn btn-neutral mt-4"
                 type="submit"

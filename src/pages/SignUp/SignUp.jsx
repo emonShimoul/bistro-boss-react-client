@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const {
@@ -89,6 +90,14 @@ const SignUp = () => {
               />
             </fieldset>
           </form>
+          <p className="ms-4 mb-4 font-bold">
+            <small>
+              Already have an account?{" "}
+              <Link to="/login" className="underline text-blue-600">
+                Login
+              </Link>
+            </small>
+          </p>
         </div>
       </div>
     </div>
