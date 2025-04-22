@@ -113,7 +113,8 @@ const Login = () => {
               <input
                 className="btn btn-neutral mt-4"
                 type="submit"
-                disabled={disabled}
+                // disabled={disabled}
+                disabled={false}
                 value="Login"
               />
             </fieldset>
