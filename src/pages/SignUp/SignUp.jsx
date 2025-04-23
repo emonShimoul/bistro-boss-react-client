@@ -3,8 +3,11 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
@@ -15,22 +18,31 @@ const SignUp = () => {
   const navigate = useNavigate(0);
 
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     createNewUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
       updatedUserProfile(data.name, data.photourl)
         .then(() => {
-          console.log("User profile info updated...");
-          reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "User created successfully!!",
-            showConfirmButton: false,
-            timer: 1500,
+          // create user entry in the database
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("User added to db");
+              reset();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "User created successfully!!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              navigate("/");
+            }
           });
-          navigate("/");
         })
         .catch((error) => console.log(error));
     });
@@ -128,6 +140,7 @@ const SignUp = () => {
               </Link>
             </small>
           </p>
+          <SocialLogin></SocialLogin>
         </div>
       </div>
     </div>
