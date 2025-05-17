@@ -24,6 +24,9 @@ const SSLPayment = () => {
       payment
     );
     console.log("response", response);
+    if (response.data?.gatewayUrl) {
+      window.location.replace(response.data.gatewayUrl);
+    }
   };
 
   return (
